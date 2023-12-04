@@ -2,7 +2,7 @@ import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, List
 import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 import { Box } from '@mui/system';
 
-import { useDrawerContext } from '../../contexts';
+import { useAppThemeContext, useDrawerContext } from '../../contexts';
 import React from 'react';
 
 //#region Criação dos botoes do Menu
@@ -40,7 +40,7 @@ export const MenuLateral: React.FC<IAppThemeProviderProps> = ({ children }) => {
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { isDrawerOpen, drawerOptions, toggleDrawerOpen } = useDrawerContext();
-
+    const { toggleTheme } = useAppThemeContext();
     return (
         <>
             <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : 'permanent'} onClose={toggleDrawerOpen}>
@@ -67,6 +67,16 @@ export const MenuLateral: React.FC<IAppThemeProviderProps> = ({ children }) => {
                                 />
                             ))}
 
+                        </List>
+                    </Box>
+                    <Box>
+                        <List component="nav">
+                            <ListItemButton onClick={toggleTheme}>
+                                <ListItemIcon>
+                                    <Icon>dark_mode</Icon>
+                                </ListItemIcon>
+                                <ListItemText primary="Alternar tema" />
+                            </ListItemButton>
                         </List>
                     </Box>
 
