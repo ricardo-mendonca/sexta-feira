@@ -109,13 +109,7 @@ export const ListagemDePessoas: React.FC = () => {
           )}
 
           <TableFooter>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <LinearProgress variant='indeterminate' />
-                </TableCell>
-              </TableRow>
-            )}
+            
             {(totalCount > 0 && totalCount > Environment.LIMITE_DE_LINHAS) && (
               <TableRow>
                 <TableCell colSpan={3}>
@@ -124,6 +118,13 @@ export const ListagemDePessoas: React.FC = () => {
                     count={Math.ceil(totalCount / Environment.LIMITE_DE_LINHAS)}
                     onChange={(_, newPage) => setSearchParams({ busca, pagina: newPage.toString() }, { replace: true })}
                   />
+                </TableCell>
+              </TableRow>
+            )}
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <LinearProgress variant='indeterminate' />
                 </TableCell>
               </TableRow>
             )}

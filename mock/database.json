@@ -2,9 +2,9 @@
   "pessoas": [
     {
       "id": 1,
+      "nomeCompleto": "Ricardo Mendonca",
       "email": "ricardo@teste.com.br",
-      "cidadeId": 1,
-      "nomeCompleto": "Ricardo Mendonca"
+      "cidadeId": 6
     },
     {
       "id": 2,
@@ -64,7 +64,7 @@
       "id": 12,
       "nomeCompleto": "teste teste da silva",
       "email": "teste@teste.com",
-      "cidadeId": 1
+      "cidadeId": 6
     }
   ],
   "cidades": [
@@ -83,6 +83,17 @@
     {
       "nome": "Diadema",
       "id": 4
+    },
+    {
+      "nome": "São Vicente",
+      "id": 5
+    },
+    {
+      "nome": "Riacho Grande",
+      "id": 6
     }
-  ]
+  ],
+  "auth": {
+    "accessToken": "aaaaaaaaaa.bbbbbbbbbb.cccccccc"
+  }
 }
