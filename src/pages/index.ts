@@ -3,4 +3,5 @@ export * from './pessoas/DetalheDePessoas';
 export * from './cidades/ListagemDeCidades';
 export * from './cidades/DetalheDeCidades';
 export * from './dashboard/Dashboard';
-export * from './banco/ListagemDeBanco'
+export * from './banco/ListagemDeBanco';
+export * from './banco/DetalheDeBanco';

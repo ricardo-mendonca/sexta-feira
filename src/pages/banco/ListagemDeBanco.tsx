@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Icon, IconButton, LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@mui/material";
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { BancoService, IListagemBanco } from "../../shared/services/api/banco/BancoService";
 import { FerramentasDaListagem } from "../../shared/components"
@@ -9,6 +9,7 @@ import { LayoutBaseDePagina } from "../../shared/layouts"
 import { Environment } from "../../shared/environment";
 
 export const ListagemDeBanco: React.FC = () => {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,7 @@ export const ListagemDeBanco: React.FC = () => {
 
     const pagina = useMemo(() => {
         return Number(searchParams.get('pagina') || '1');
-      }, [searchParams]);
+    }, [searchParams]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -56,7 +57,8 @@ export const ListagemDeBanco: React.FC = () => {
                 <FerramentasDaListagem
                     mostrarInputBusca
                     textoDaBusca={busca}
-                    textoBotaoNovo='Nova'
+                    textoBotaoNovo='Novo'
+                    aoClicarEmNovo={()=> navigate('/bancos/detalhe/novo')}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
 
 
@@ -76,7 +78,12 @@ export const ListagemDeBanco: React.FC = () => {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>Ação</TableCell>
+                                <TableCell><IconButton size="small" >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                                    <IconButton size="small"  onClick={() => navigate(`/bancos/detalhe/${row.id}`)}>
+                                        <Icon>edit</Icon>
+                                    </IconButton></TableCell>
                                 <TableCell>{row.descricao}</TableCell>
                                 <TableCell>{row.ativo === "1" ? "Sim" : "Não"}</TableCell>
                             </TableRow>
@@ -84,7 +91,7 @@ export const ListagemDeBanco: React.FC = () => {
                     </TableBody>
 
                     <TableFooter>
-                        
+
                         {(totalCount > 0 && totalCount > Environment.LIMITE_DE_LINHAS) && (
                             <TableRow>
                                 <TableCell colSpan={3}>

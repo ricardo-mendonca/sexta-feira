@@ -21,14 +21,18 @@ type TbancoComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TbancoComTotalCount | Error> => {
   try {
-    const urlRelativa = `/v1/GetBancos?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&filter=${filter}`;
+    const urlRelativa = `/v1/GetBancos?page=${page}&limit=${Environment.LIMITE_DE_LINHAS}&filter=${filter}`;
 
     const { data, headers } = await Api().get(urlRelativa);
 
     if (data) {
+      console.log('retorno')
+      console.log(data);
+      console.log((headers ));
       return {
+        
         data,
-        totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
+        totalCount: Number((data[0].usuarioId)|| Environment.LIMITE_DE_LINHAS),
       };
     }
 
