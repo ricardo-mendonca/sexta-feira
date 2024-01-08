@@ -27,6 +27,20 @@ export const ListagemDeBanco: React.FC = () => {
         return Number(searchParams.get('pagina') || '1');
     }, [searchParams]);
 
+    const handleDelete = (id: number) => {
+        if (window.confirm('Mano, tem certeza que quer apagar o registro ' + id + ' ?')) {
+    
+            BancoService.deleteById(id).then((result) => {
+                if (result instanceof Error) {
+                    alert(result.message);
+                } else {
+                    alert("Registro apagado com sucesso!");
+                    navigate("/bancos");
+                }
+            });
+        };
+      };
+
     useEffect(() => {
         setIsLoading(true);
 
@@ -38,7 +52,7 @@ export const ListagemDeBanco: React.FC = () => {
                     if (result instanceof Error) {
                         alert(result.message);
                     } else {
-                        console.log(result);
+                  
 
                         setRows(result.data);
 
@@ -78,7 +92,7 @@ export const ListagemDeBanco: React.FC = () => {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell><IconButton size="small" >
+                                <TableCell><IconButton size="small" onClick={() => handleDelete(row.id)}>
                                     <Icon>delete</Icon>
                                 </IconButton>
                                     <IconButton size="small"  onClick={() => navigate(`/bancos/detalhe/${row.id}`)}>

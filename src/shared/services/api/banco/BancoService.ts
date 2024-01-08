@@ -26,9 +26,6 @@ const getAll = async (page = 1, filter = ''): Promise<TbancoComTotalCount | Erro
     const { data, headers } = await Api().get(urlRelativa);
 
     if (data) {
-      console.log('retorno')
-      console.log(data);
-      console.log((headers ));
       return {
         
         data,
@@ -38,14 +35,13 @@ const getAll = async (page = 1, filter = ''): Promise<TbancoComTotalCount | Erro
 
     return new Error('Erro ao listar os registros.');
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao listar os registros.');
   }
 };
 
 const getById = async (id: number): Promise<IDetalheBanco | Error> => {
   try {
-    const { data } = await Api().get(`/cidades/${id}`);
+    const { data } = await Api().get(`v1/GetBancoId/${id}`);
 
     if (data) {
       return data;
@@ -53,14 +49,13 @@ const getById = async (id: number): Promise<IDetalheBanco | Error> => {
 
     return new Error('Erro ao consultar o registro.');
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao consultar o registro.');
   }
 };
 
 const create = async (dados: Omit<IDetalheBanco, 'id'>): Promise<number | Error> => {
   try {
-    const { data } = await Api().post<IDetalheBanco>('/cidades', dados);
+    const { data } = await Api().post<IDetalheBanco>('v1/CreateBanco', dados);
 
     if (data) {
       return data.id;
@@ -68,25 +63,22 @@ const create = async (dados: Omit<IDetalheBanco, 'id'>): Promise<number | Error>
 
     return new Error('Erro ao criar o registro.');
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao criar o registro.');
   }
 };
 
 const updateById = async (id: number, dados: IDetalheBanco): Promise<void | Error> => {
   try {
-    await Api().put(`/cidades/${id}`, dados);
+    await Api().put(`v1/UpdateBanco/${id}`, dados);
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao atualizar o registro.');
   }
 };
 
 const deleteById = async (id: number): Promise<void | Error> => {
   try {
-    await Api().delete(`/cidades/${id}`);
+    await Api().delete(`v1/DeleteBanco/${id}`);
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao apagar o registro.');
   }
 };
