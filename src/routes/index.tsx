@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { useDrawerContext } from '../shared/contexts';
-import { Dashboard, DetalheDeCidades, DetalheDePessoas, ListagemDeCidades, ListagemDePessoas } from '../pages';
+import { Dashboard, ListagemDeBanco,DetalheDeBanco,  ListagemDeCliente,DetalheDeCliente,  ListagemDeServico,DetalheDeServico, ListagemDeAtendente,DetalheDeAtendente, 
+         ListagemDeAtendimento,DetalheDeAtendimento, } from '../pages';
 
 
 export const AppRoutes = () => {
@@ -16,15 +17,30 @@ export const AppRoutes = () => {
         label: 'Página inicial',
       },
       {
+        icon: 'calendar_month',
+        path: '/atendimento',
+        label: 'Atendimentos',
+      },
+      {
         icon: 'location_city',
-        path: '/cidades',
-        label: 'Cidades',
+        path: '/servico',
+        label: 'Serviços',
       },
       {
         icon: 'people',
-        path: '/pessoas',
-        label: 'Pessoas',
+        path: '/cliente',
+        label: 'Clientes',
       },
+      {
+        icon: 'account_balance',
+        path: '/bancos',
+        label: 'Banco',
+      },
+      {
+        icon: 'person',
+        path: '/atendente',
+        label: 'Atendentes',
+      }
     ]);
   }, []);
 
@@ -32,11 +48,20 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/pagina-inicial" element={<Dashboard />} />
 
-      <Route path="/cidades" element={<ListagemDeCidades />} />
-      <Route path="/cidades/detalhe/:id" element={<DetalheDeCidades />} />
+      <Route path="/servico" element={<ListagemDeServico />} />
+      <Route path="/servico/detalhe/:id" element={<DetalheDeServico />} />
       
-      <Route path="/pessoas" element={<ListagemDePessoas />} />
-      <Route path="/pessoas/detalhe/:id" element={<DetalheDePessoas />} />
+      <Route path="/bancos" element={<ListagemDeBanco />} />
+      <Route path="/bancos/detalhe/:id" element={<DetalheDeBanco /> } />
+
+      <Route path="/cliente" element={<ListagemDeCliente />} />
+      <Route path="/cliente/detalhe/:id" element={<DetalheDeCliente /> } />
+
+      <Route path="/atendente" element={<ListagemDeAtendente />} />
+      <Route path="/atendente/detalhe/:id" element={<DetalheDeAtendente /> } />
+
+      <Route path="/atendimento" element={<ListagemDeAtendimento/>} />
+      <Route path="/atendimento/detalhe/:id" element={<DetalheDeAtendimento /> } />
 
 
       <Route path="*" element={<Navigate to="/pagina-inicial" />} />
