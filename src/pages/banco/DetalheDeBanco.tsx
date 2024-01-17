@@ -155,11 +155,7 @@ export const DetalheDeBanco: React.FC = () => {
                 >
                     <Grid container direction="column" padding={2} spacing={2}>
 
-                        {isLoading && (
-                            <Grid item>
-                                <LinearProgress variant="indeterminate"></LinearProgress>
-                            </Grid>
-                        )}
+                       
 
                         <Grid item>
                             <Typography variant="h6">Geral</Typography>
@@ -187,7 +183,11 @@ export const DetalheDeBanco: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
-
+                        {isLoading && (
+                            <Grid item>
+                                <LinearProgress variant="indeterminate"></LinearProgress>
+                            </Grid>
+                        )}
                     </Grid>
                 </Box>
             </VForm>

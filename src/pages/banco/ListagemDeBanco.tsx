@@ -50,7 +50,10 @@ export const ListagemDeBanco: React.FC = () => {
                     setIsLoading(false);
 
                     if (result instanceof Error) {
-                        alert(result.message);
+                        //console.log("ret erro");
+                        //console.log(result);
+                        //alert(result.message);
+                        alert("Nenhum registro encontrado!");
                     } else {
                   
 
