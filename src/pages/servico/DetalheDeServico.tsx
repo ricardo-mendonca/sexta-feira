@@ -84,6 +84,28 @@ export const DetalheDeServico: React.FC = () => {
 
     const handleSave = (dados: IFormData) => {
 
+
+//#region Validação campos
+if(dados.nomeServico.length < 2){
+    formRef.current?.setFieldError('nomeServico','O campo serviço é obrigatorio, minimo de 3 caracteres!');
+    setIsLoading(false);
+    return;
+}
+if(dados.descricaoServico.length < 2){
+    formRef.current?.setFieldError('descricaoServico','O campo Descricao de serviço é obrigatorio!');
+    setIsLoading(false);
+    return;
+}
+if(dados.precoServico < 0){
+    formRef.current?.setFieldError('precoServico','O campo Descricao de serviço é obrigatorio!');
+    setIsLoading(false);
+    return;
+}
+//#endregion
+
+
+
+
         dados.ativo = (ativo === true ? '1' : '0');
         dados.tempoHoraServico = (Number(tempoHoraServico));
        
@@ -119,7 +141,6 @@ export const DetalheDeServico: React.FC = () => {
                 }
             });
         }
-
     };
 
     const handleDelete = () => {
