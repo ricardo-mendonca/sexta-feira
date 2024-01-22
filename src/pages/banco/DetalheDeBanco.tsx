@@ -1,13 +1,12 @@
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as yup from 'yup';
-import { useNavigate, useParams } from "react-router-dom";
 
-import { BancoService } from "../../shared/services/api/banco/BancoService";
+import { Box, Grid, LinearProgress, Paper, Switch, Typography } from "@mui/material";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
+import { BancoService } from "../../shared/services/api/banco/BancoService";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { Box, Grid, LinearProgress, Paper, Switch, Typography } from "@mui/material";
-
 
 interface IFormData {
     descricao: string;
@@ -138,9 +137,9 @@ export const DetalheDeBanco: React.FC = () => {
 
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
+                    aoClicarEmVoltar={() => navigate("/bancos")}
                     aoClicarEmApagar={() => handleDelete(Number(id))}
                     aoClicarEmNovo={() => navigate("/bancos/detalhe/novo")}
-                    aoClicarEmVoltar={() => navigate("/bancos")}
                 />
             }
         >
@@ -154,13 +153,6 @@ export const DetalheDeBanco: React.FC = () => {
                     variant="outlined"
                 >
                     <Grid container direction="column" padding={2} spacing={2}>
-
-                        {isLoading && (
-                            <Grid item>
-                                <LinearProgress variant="indeterminate"></LinearProgress>
-                            </Grid>
-                        )}
-
                         <Grid item>
                             <Typography variant="h6">Geral</Typography>
                         </Grid>
@@ -187,7 +179,11 @@ export const DetalheDeBanco: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
-
+                        {isLoading && (
+                            <Grid item>
+                                <LinearProgress variant="indeterminate"></LinearProgress>
+                            </Grid>
+                        )}
                     </Grid>
                 </Box>
             </VForm>

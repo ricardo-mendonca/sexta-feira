@@ -29,7 +29,7 @@ export const ListagemDeBanco: React.FC = () => {
 
     const handleDelete = (id: number) => {
         if (window.confirm('Mano, tem certeza que quer apagar o registro ' + id + ' ?')) {
-    
+
             BancoService.deleteById(id).then((result) => {
                 if (result instanceof Error) {
                     alert(result.message);
@@ -39,7 +39,7 @@ export const ListagemDeBanco: React.FC = () => {
                 }
             });
         };
-      };
+    };
 
     useEffect(() => {
         setIsLoading(true);
@@ -50,9 +50,12 @@ export const ListagemDeBanco: React.FC = () => {
                     setIsLoading(false);
 
                     if (result instanceof Error) {
-                        alert(result.message);
+                        //console.log("ret erro");
+                        //console.log(result);
+                        //alert(result.message);
+                        alert("Nenhum registro encontrado!");
                     } else {
-                  
+
 
                         setRows(result.data);
 
@@ -72,7 +75,7 @@ export const ListagemDeBanco: React.FC = () => {
                     mostrarInputBusca
                     textoDaBusca={busca}
                     textoBotaoNovo='Novo'
-                    aoClicarEmNovo={()=> navigate('/bancos/detalhe/novo')}
+                    aoClicarEmNovo={() => navigate('/bancos/detalhe/novo')}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
 
 
@@ -92,12 +95,14 @@ export const ListagemDeBanco: React.FC = () => {
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell><IconButton size="small" onClick={() => handleDelete(row.id)}>
-                                    <Icon>delete</Icon>
-                                </IconButton>
-                                    <IconButton size="small"  onClick={() => navigate(`/bancos/detalhe/${row.id}`)}>
+                                <TableCell>
+                                    <IconButton size="small" onClick={() => handleDelete(row.id)}>
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                    <IconButton size="small" onClick={() => navigate(`/bancos/detalhe/${row.id}`)}>
                                         <Icon>edit</Icon>
-                                    </IconButton></TableCell>
+                                    </IconButton>
+                                </TableCell>
                                 <TableCell>{row.descricao}</TableCell>
                                 <TableCell>{row.ativo === "1" ? "Sim" : "Não"}</TableCell>
                             </TableRow>
@@ -105,7 +110,6 @@ export const ListagemDeBanco: React.FC = () => {
                     </TableBody>
 
                     <TableFooter>
-
                         {(totalCount > 0 && totalCount > Environment.LIMITE_DE_LINHAS) && (
                             <TableRow>
                                 <TableCell colSpan={3}>
@@ -128,8 +132,6 @@ export const ListagemDeBanco: React.FC = () => {
 
                 </Table>
             </TableContainer>
-
-
 
         </LayoutBaseDePagina>
     )
