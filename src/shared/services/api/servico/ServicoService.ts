@@ -15,12 +15,10 @@ export interface iDetalheServico {
   id: number;
   nomeServico: string;
   descricaoServico: string;
-  tempoServico: number;
   tempoHoraServico: number;
   precoServico: number;
   ativo: string;
-  //tempoHoraServico: number;
-
+  //tempoServico: number;
 }
 type TServicoComTotalCount = {
   data: IListagemServico[];

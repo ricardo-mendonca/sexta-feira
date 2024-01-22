@@ -1,5 +1,4 @@
 import { SetStateAction, useEffect, useState } from "react";
-import * as yup from 'yup';
 import { useNavigate, useParams } from "react-router-dom";
 
 import { ServicoService } from "../../shared/services/api/servico/ServicoService";
@@ -7,20 +6,22 @@ import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { Box, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Paper, Select, Switch, Typography } from "@mui/material";
+import { BancoService } from "../../shared/services/api/banco/BancoService";
 
 interface IFormData {
     nomeServico: string;
     descricaoServico: string;
-    tempoHoraServico: string;
+    tempoHoraServico: number;
     precoServico: number;
     ativo: string;
+    id: number;
 }
 
-//const formValidationSchema: yup.ObjectSchema<IFormData> = yup.object().shape({
+//const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
 //    nomeServico: yup.string().required().min(3).max(30),
 //    descricaoServico: yup.string().required().min(3).max(30),
-//    tempoServico: yup.string(),
-//    precoServico: yup.number(),
+//    tempoHoraServico: yup.string(),
+//    precoServico: yup.string(),
 //    ativo: yup.string().required()
 //});
 
@@ -38,11 +39,11 @@ export const DetalheDeServico: React.FC = () => {
         setAtivo(event.target.checked);
     };
     const [tempoHoraServico, setTempoHoraServico] = useState("");
-    
-	const handleChangeTempo = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setTempoHoraServico(event.target.value);
-    };
 
+    const handleChangeTempo = (event: { target: { value: SetStateAction<string>; }; }) => {
+        setTempoHoraServico(event.target.value);
+        console.log(event);
+    }
 
     useEffect(() => {
         if (id !== 'novo') {
@@ -81,12 +82,51 @@ export const DetalheDeServico: React.FC = () => {
 
 
 
-    const handleSave = () => {
-        console.log('Save');
+    const handleSave = (dados: IFormData) => {
+
+        dados.ativo = (ativo === true ? '1' : '0');
+        dados.tempoHoraServico = (Number(tempoHoraServico));
+       
+        if (id === "novo") {
+            
+            console.log("dados");
+            console.log(dados);
+            ServicoService.create(dados).then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert("Ops!! algo deu ruim! \n" + result.message);
+                } else {
+                    if (isSaveAndClose()) {
+                        navigate('/servico');
+                    } else {
+                        navigate(`/servico/detalhe/${result}`);
+                    }
+                }
+            });
+        }
+        else {
+            setIsLoading(true);
+            
+            dados.id = Number(id);
+                       ServicoService.updateById(Number(id),  dados ).then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert("Ops!! algo deu ruim! \n" + result.message);
+                } else {
+                    if (isSaveAndClose()) {
+                        navigate('/servico');
+                    }
+                }
+            });
+        }
+
     };
 
     const handleDelete = () => {
         console.log('Save');
+
+
+
     };
 
     return (
@@ -100,8 +140,8 @@ export const DetalheDeServico: React.FC = () => {
                     mostrarBotaoNovo={id !== 'novo'}
                     mostrarBotaoApagar={id !== 'novo'}
 
-                    aoClicarEmSalvar={handleSave}
-                    aoClicarEmSalvarEFechar={handleSave}
+                    aoClicarEmSalvar={save}
+                    aoClicarEmSalvarEFechar={saveAndClose}
                     aoClicarEmApagar={handleDelete}
                     aoClicarEmVoltar={() => navigate('/servico')}
                     aoClicarEmNovo={() => navigate('/servico/detalhe/novo')}
@@ -188,8 +228,8 @@ export const DetalheDeServico: React.FC = () => {
                                         <MenuItem value={40}>40min</MenuItem>
                                         <MenuItem value={50}>50min</MenuItem>
                                         <MenuItem value={60}>1 hora</MenuItem>
-                                        <MenuItem value={90}>1h 10min</MenuItem>
-                                        <MenuItem value={90}>1h 20min</MenuItem>
+                                        <MenuItem value={70}>1h 10min</MenuItem>
+                                        <MenuItem value={80}>1h 20min</MenuItem>
                                         <MenuItem value={90}>1h 30min</MenuItem>
                                         <MenuItem value={100}>1h 40min</MenuItem>
                                         <MenuItem value={110}>1h 50min</MenuItem>
