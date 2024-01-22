@@ -40,9 +40,6 @@ export const ListagemDeServico: React.FC = () => {
           setIsLoading(false);
 
           if (result instanceof Error) {
-            //console.log("ret erro");
-            //console.log(result);
-            //alert(result.message);
             alert("Nenhum registro encontrado!");
           } else {
 
@@ -61,8 +58,8 @@ export const ListagemDeServico: React.FC = () => {
         <FerramentasDaListagem
           mostrarInputBusca
           textoDaBusca={busca}
-          textoBotaoNovo='Nova'
-          aoClicarEmNovo={() => navigate('/servico/detalhe/nova')}
+          textoBotaoNovo='Novo'
+          aoClicarEmNovo={() => navigate('/servico/detalhe/novo')}
           aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
         />
       }
