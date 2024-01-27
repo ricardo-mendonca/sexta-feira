@@ -28,7 +28,7 @@ export const ListagemDeBanco: React.FC = () => {
     }, [searchParams]);
 
     const handleDelete = (id: number) => {
-        if (window.confirm('Mano, tem certeza que quer apagar o registro ' + id + ' ?')) {
+        if (window.confirm('Você tem certeza que quer apagar o registro ' + id + ' ?')) {
 
             BancoService.deleteById(id).then((result) => {
                 if (result instanceof Error) {

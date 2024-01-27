@@ -110,7 +110,7 @@ export const DetalheDeBanco: React.FC = () => {
     const handleDelete = (id: number) => {
         if (
             window.confirm(
-                "Mano, tem certeza que quer apagar o registro " + id + " ?"
+                "você tem certeza que quer apagar o registro " + id + " ?"
             )
         ) {
             BancoService.deleteById(id).then((result) => {

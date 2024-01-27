@@ -6,7 +6,7 @@ import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { Box, FormControl, Grid, InputLabel, LinearProgress, MenuItem, Paper, Select, Switch, Typography } from "@mui/material";
-import { BancoService } from "../../shared/services/api/banco/BancoService";
+
 
 interface IFormData {
     nomeServico: string;
@@ -17,14 +17,6 @@ interface IFormData {
     id: number;
 }
 
-//const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
-//    nomeServico: yup.string().required().min(3).max(30),
-//    descricaoServico: yup.string().required().min(3).max(30),
-//    tempoHoraServico: yup.string(),
-//    precoServico: yup.string(),
-//    ativo: yup.string().required()
-//});
-
 export const DetalheDeServico: React.FC = () => {
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
     const navigate = useNavigate();
@@ -34,15 +26,15 @@ export const DetalheDeServico: React.FC = () => {
     const [nomeServico, setNomeServico] = useState("");
     const [descricaoServico, setDescricaoServico] = useState("");
     const [precoServico, setPrecoServico] = useState("");
+ 
     const [ativo, setAtivo] = useState(true);
     const handleChangeSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAtivo(event.target.checked);
     };
-    const [tempoHoraServico, setTempoHoraServico] = useState("");
 
+    const [tempoHoraServico, setTempoHoraServico] = useState("");
     const handleChangeTempo = (event: { target: { value: SetStateAction<string>; }; }) => {
         setTempoHoraServico(event.target.value);
-        console.log(event);
     }
 
     useEffect(() => {
@@ -52,7 +44,7 @@ export const DetalheDeServico: React.FC = () => {
             ServicoService.getById(Number(id))
                 .then((result) => {
                     setIsLoading(false);
-                    console.log(result);
+
                     if (result instanceof Error) {
                         alert(" OPS!! algo deu errado \n" + result.message);
                         navigate("/servico");
@@ -81,38 +73,36 @@ export const DetalheDeServico: React.FC = () => {
     }, [formRef, id, navigate]);
 
 
-
     const handleSave = (dados: IFormData) => {
 
+        //#region VALIDAÇÃO DE CAMPO
+        var validacao = 0;
+        if (dados.nomeServico.length < 2) {
+            formRef.current?.setFieldError('nomeServico', 'O campo serviço é obrigatorio, minimo de 3 caracteres!');
+            setIsLoading(false);
+            validacao = 1;
+        }
+        if (dados.descricaoServico.length < 2) {
+            formRef.current?.setFieldError('descricaoServico', 'O campo Descricao de serviço é obrigatorio!');
+            setIsLoading(false);
+            validacao = 1;
+        }
 
-//#region Validação campos
-if(dados.nomeServico.length < 2){
-    formRef.current?.setFieldError('nomeServico','O campo serviço é obrigatorio, minimo de 3 caracteres!');
-    setIsLoading(false);
-    return;
-}
-if(dados.descricaoServico.length < 2){
-    formRef.current?.setFieldError('descricaoServico','O campo Descricao de serviço é obrigatorio!');
-    setIsLoading(false);
-    return;
-}
-if(dados.precoServico < 0){
-    formRef.current?.setFieldError('precoServico','O campo Descricao de serviço é obrigatorio!');
-    setIsLoading(false);
-    return;
-}
-//#endregion
+        if ((dados.precoServico.toString()) == "") {
+            formRef.current?.setFieldError('precoServico', 'O campo Preço é obrigatorio!');
+            setIsLoading(false);
+            validacao = 1;
+        }
 
-
-
+        if (validacao != 0) {
+            return;
+        }
+        //#endregion
 
         dados.ativo = (ativo === true ? '1' : '0');
         dados.tempoHoraServico = (Number(tempoHoraServico));
-       
+
         if (id === "novo") {
-            
-            console.log("dados");
-            console.log(dados);
             ServicoService.create(dados).then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error) {
@@ -128,9 +118,9 @@ if(dados.precoServico < 0){
         }
         else {
             setIsLoading(true);
-            
+
             dados.id = Number(id);
-                       ServicoService.updateById(Number(id),  dados ).then((result) => {
+            ServicoService.updateById(Number(id), dados).then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error) {
                     alert("Ops!! algo deu ruim! \n" + result.message);
@@ -143,12 +133,26 @@ if(dados.precoServico < 0){
         }
     };
 
-    const handleDelete = () => {
-        console.log('Save');
+    const handleDelete = (id: number) => {
+        if (
+            window.confirm(
+                "você tem certeza que quer apagar o registro " + id + " ?"
+            )
+        ) {
+            ServicoService.deleteById(id).then((result) => {
+                if (result instanceof Error) {
+                    alert(result.message);
+                } else {
+                    alert("Registro apagado com sucesso!");
+                    navigate("/servico");
+                }
+            });
+        }
 
 
 
     };
+
 
     return (
 
@@ -163,7 +167,7 @@ if(dados.precoServico < 0){
 
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
-                    aoClicarEmApagar={handleDelete}
+                    aoClicarEmApagar={() => handleDelete(Number(id))}
                     aoClicarEmVoltar={() => navigate('/servico')}
                     aoClicarEmNovo={() => navigate('/servico/detalhe/novo')}
                 />
@@ -227,6 +231,7 @@ if(dados.precoServico < 0){
                             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                                 <VTextField
                                     fullWidth
+                                    type="number"
                                     name="precoServico"
                                     disabled={isLoading}
                                     label="Valor do serviço"
