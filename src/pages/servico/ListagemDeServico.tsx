@@ -28,7 +28,17 @@ export const ListagemDeServico: React.FC = () => {
   }, [searchParams]);
 
   const handleDelete = (id: number) => {
-    console.log('Save');
+    if (window.confirm('Você tem certeza que quer apagar o registro ' + id + ' ?')) {
+
+      ServicoService.deleteById(id).then((result) => {
+          if (result instanceof Error) {
+              alert(result.message);
+          } else {
+              alert("Registro apagado com sucesso!");
+              navigate("/servico");
+          }
+      });
+  };
   };
 
   useEffect(() => {
@@ -43,7 +53,7 @@ export const ListagemDeServico: React.FC = () => {
             alert("Nenhum registro encontrado!");
           } else {
 
-            console.log(result);
+            
             setRows(result.data);
             setTotalCount(result.totalCount);
           }
