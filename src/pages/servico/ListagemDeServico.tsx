@@ -13,7 +13,6 @@ export const ListagemDeServico: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(true);
-  //const { id = 'novo' } = useParams<'id'>();
   const [totalCount, setTotalCount] = useState(0);
   const [rows, setRows] = useState<IListagemServico[]>([]);
 

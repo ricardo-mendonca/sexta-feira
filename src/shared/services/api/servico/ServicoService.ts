@@ -18,7 +18,6 @@ export interface iDetalheServico {
   tempoHoraServico: number;
   precoServico: number;
   ativo: string;
-  //tempoServico: number;
 }
 type TServicoComTotalCount = {
   data: IListagemServico[];
