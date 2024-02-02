@@ -1,9 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import moment from "moment";
 
 import { Box, Grid, LinearProgress, Paper, Switch, Typography } from "@mui/material";
-import { ServicoService } from "../../shared/services/api/servico/ServicoService";
 import { ClienteService } from "../../shared/services/api/cliente/ClienteService";
 import { VForm, VTextField, useVForm } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
@@ -16,7 +14,7 @@ interface IFormData {
     email: string;
     celular: string;
     instagram: string;
-    nascimento: Date;
+    nascimento: string;
     cpf: string;
     rg: string;
     endereco: string;
@@ -66,22 +64,19 @@ export const DetalheDeCliente: React.FC = () => {
             ClienteService.getById(Number(id))
                 .then((result) => {
                     setIsLoading(false);
-                    console.log(result);
+                  
                     if (result instanceof Error) {
                         alert(" OPS!! algo deu errado \n" + result.message);
                         navigate("/cliente");
                     }
                     else {
 
- //var date = moment(result.nascimento).format("DD-MM-YYYY");
- //console.log("result");
- //console.log(result);
                         setNome(result.nome);
                         setApelido(result.apelido);
                         setEmail(result.email);
                         setCelular(result.celular);
                         setInstagram(result.instagram);
-                        setNascimento(moment(result.nascimento).format("yyyy-MM-dd"));
+                        setNascimento(result.nascimento);
                         setCpf(result.cpf);
                         setRg(result.rg);
                         setEndereco(result.endereco);
@@ -293,9 +288,11 @@ export const DetalheDeCliente: React.FC = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={8} md={5} lg={3} xl={3}>
+                                
+                  
                                 <VTextField
                                     fullWidth
-                                    type="date"
+                                   
                                     name="nascimento"
                                     disabled={isLoading}
                                     label="Data Nascimento"

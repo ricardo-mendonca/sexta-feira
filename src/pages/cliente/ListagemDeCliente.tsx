@@ -19,12 +19,19 @@ export const ListagemDeCliente: React.FC = () => {
 
   const { debounce } = useDebounce(600, false);
 
-  const handleSave = () => {
-    console.log('Save');
-  };
-
+  
   const handleDelete = (id: number) => {
-    console.log('delete');
+    if (window.confirm('Você tem certeza que quer apagar o registro ' + id + ' ?')) {
+
+      ClienteService.deleteById(id).then((result) => {
+          if (result instanceof Error) {
+              alert(result.message);
+          } else {
+              alert("Registro apagado com sucesso!");
+              navigate("/cliente");
+          }
+      });
+  };
   };
   
   const busca = useMemo(() => {

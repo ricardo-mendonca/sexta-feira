@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
@@ -29,7 +30,7 @@ export interface IDetalheCliente {
     email: string;
     celular: string;
     instagram: string;
-    nascimento: Date;
+    nascimento: string;
     cpf: string;
     rg: string;
     endereco: string;
@@ -75,6 +76,9 @@ const getById = async (id: number): Promise<IDetalheCliente | Error> => {
         const { data } = await Api().get(`v1/GetClienteId/${id}`);
 
         if (data) {
+            //formatando data           
+            data.nascimento = (moment(data.nascimento).format("DD/MM/YYYY"));
+            
             return data;
         }
 
