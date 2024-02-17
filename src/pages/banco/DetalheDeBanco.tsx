@@ -171,7 +171,7 @@ export const DetalheDeBanco: React.FC = () => {
 
                         <Grid container item direction="row">
                             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                                <label>Conta Ativa ? </label>
+                                <label>Banco Ativo ? </label>
                                 <Switch
                                     checked={checked}
                                     onChange={handleChangeSwitch}
