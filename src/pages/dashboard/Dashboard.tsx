@@ -24,7 +24,7 @@ export const Dashboard = () => {
               <Card>
                 <CardContent>
                   <Typography variant='h5' align='center'>
-                    Total de pessoas
+                    total XPTO
                   </Typography>
 
                   <Box padding={6} display='flex' justifyContent='center' alignItems='center'>
@@ -44,7 +44,7 @@ export const Dashboard = () => {
               <Card>
                 <CardContent>
                   <Typography variant='h5' align='center'>
-                    Total de cidades
+                    Total YPTO
                   </Typography>
 
                   <Box padding={6} display='flex' justifyContent='center' alignItems='center'>

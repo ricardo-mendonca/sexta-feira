@@ -9,8 +9,8 @@ export * from './cliente/ListagemDeCliente';
 export * from './servico/DetalheDeServico';
 export * from './servico/ListagemDeServico';
 
-export * from './Atendente/DetalheDeAtendente';
-export * from './Atendente/ListagemDeAtendentes';
+export * from './atendente/DetalheDeAtendente';
+export * from './atendente/ListagemDeAtendentes';
 
 export * from './atendimento/DetalheDeAtendimento';
 export * from './atendimento/ListagemDeAtendimento';

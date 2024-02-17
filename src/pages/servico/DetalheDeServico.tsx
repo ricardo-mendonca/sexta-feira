@@ -200,7 +200,7 @@ export const DetalheDeServico: React.FC = () => {
                             </Grid>
 
                             <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                                <label>Conta Ativa ? </label>
+                                <label>Serviço Ativo ? </label>
                                 <Switch
                                     checked={ativo}
                                     onChange={handleChangeSwitch}
