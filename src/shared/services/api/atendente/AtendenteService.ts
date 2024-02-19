@@ -17,6 +17,37 @@ export interface IListagemAtendente{
     orgaoExpedidor: string;
     informacaoAdicionais: string;
     ChavePix: string;
+    agencia: string;
+    conta: string;
+    tipoConta: string;
+    tipoPessoa: string;
+    nomeConta: string;
+    cpfConta: string;
+    endereco: string;
+    numero: string;
+    complemento: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+    cep: string;
+    ativo: string;
+}
+
+export interface IDetalheAtendente{
+    id: number;
+    nome: string;
+    apelido: string;
+    email: string;
+    telefone: string;
+    proprietario: string;
+    gerente: string;
+    profissional: string;
+    nascimento: string;
+    cpf: string;
+    rg: string;
+    orgaoExpedidor: string;
+    informacaoAdicionais: string;
+    ChavePix: string;
     bancoId: number;
     agencia: string;
     conta: string;
@@ -32,43 +63,7 @@ export interface IListagemAtendente{
     estado: string;
     cep: string;
     ativo: string;
-    usuarioGrupo: string;
-    usuarioId: string;
-}
 
-export interface IDetalheCliente{
-    id: number;
-    nome: string;
-    apelido: string;
-    email: string;
-    telefone: string;
-    proprietario: string;
-    gerente: string;
-    profissional: string;
-    nascimento: string;
-    cpf: string;
-    rg: string;
-    orgaoExpedidor: string;
-    informacaoAdicionais: string;
-    ChavePix: string;
-    bancoId: string;
-    agencia: string;
-    conta: string;
-
-    tipoConta: string;
-    tipoPessoa: string;
-    nomeConta: string;
-    cpfConta: string;
-    endereco: string;
-    numero: string;
-    complemento: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-    cep: string;
-    ativo: string;
-    usuarioGrupo: string;
-    usuarioId: string;
 }
 
 type TAtendenteComTotalCount = {
@@ -98,7 +93,7 @@ const getAll = async (page = 1, filter = ''): Promise<TAtendenteComTotalCount | 
     }
 };
 
-const getById = async (id: number): Promise<IDetalheCliente | Error> => {
+const getById = async (id: number): Promise<IDetalheAtendente | Error> => {
     try {
         const { data } = await Api().get(`v1/GetAtendenteId/${id}`);
 
@@ -115,10 +110,12 @@ const getById = async (id: number): Promise<IDetalheCliente | Error> => {
     }
 };
 
-const create = async (dados: Omit<IDetalheCliente, 'id'>): Promise<number | Error> => {
+const create = async (dados: Omit<IDetalheAtendente, 'id'>): Promise<number | Error> => {
     try {
+        console.log("create");
+        console.log(dados);
 
-        const { data } = await Api().post<IDetalheCliente>('v1/CreateCliente', dados);
+        const { data } = await Api().post<IDetalheAtendente>('v1/CreateAtendente', dados);
 
         if (data) {
             return data.id;
@@ -130,9 +127,13 @@ const create = async (dados: Omit<IDetalheCliente, 'id'>): Promise<number | Erro
     }
 };
 
-const updateById = async (id: number, dados: IDetalheCliente): Promise<void | Error> => {
+const updateById = async (id: number, dados: IDetalheAtendente): Promise<void | Error> => {
     try {
-        await Api().put(`v1/UpdateCliente/${id}`, dados);
+        console.log("update");
+        console.log(dados);
+        //dados.nascimento = (moment(dados.nascimento).format("YYYY-MM-DD"));
+        //console.log(dados);
+        await Api().put(`v1/UpdateAtendente/${id}`, dados);
     } catch (error) {
         return new Error((error as { message: string }).message || 'Erro ao atualizar o registro.');
     }
@@ -140,7 +141,7 @@ const updateById = async (id: number, dados: IDetalheCliente): Promise<void | Er
 
 const deleteById = async (id: number): Promise<void | Error> => {
     try {
-        await Api().delete(`v1/DeleteCliente/${id}`);
+        await Api().delete(`v1/DeleteAtendente/${id}`);
     } catch (error) {
         return new Error((error as { message: string }).message || 'Erro ao apagar o registro.');
     }

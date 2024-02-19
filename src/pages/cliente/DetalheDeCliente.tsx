@@ -139,8 +139,9 @@ export const DetalheDeCliente: React.FC = () => {
         }
         if (validacao != 0) {
             return;
-            //#endregion
         }
+        //#endregion
+       
         dados.ativo = (ativo === true ? '1' : '0');
 
         if (id === "novo") {
