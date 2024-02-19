@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
+import { Box, Divider, Grid, LinearProgress, Paper, Switch, Typography } from "@mui/material";
+import { AtendenteService } from "../../shared/services/api/atendente/AtendenteService";
+import { VForm, VTextField, useVForm } from "../../shared/forms";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
-import { VForm, VTextField, useVForm } from "../../shared/forms";
-import { useEffect, useState } from "react";
-import { AtendenteService } from "../../shared/services/api/atendente/AtendenteService";
-import { Box, Divider, Grid, LinearProgress, Paper, Switch, Typography } from "@mui/material";
+import moment from "moment";
 
 interface IFormData {
     id: number;
@@ -38,8 +39,7 @@ interface IFormData {
     estado: string;
     cep: string;
     ativo: string;
-    usuarioGrupo: string;
-    usuarioId: string;
+  
 }
 
 export const DetalheDeAtendente: React.FC = () => {
@@ -60,7 +60,7 @@ export const DetalheDeAtendente: React.FC = () => {
     const [orgaoExpedidor, setOrgaoExpedidor] = useState("");
     const [informacaoAdicionais, setInformacaoAdicionais] = useState("");
     const [chavePix, setChavePix] = useState("");
-    const [bancoId, setBanco] = useState("");
+    const [bancoId, setBancoId] = useState("");
     const [agencia, setAgencia] = useState("");
     const [conta, setConta] = useState("");
     const [digito, setDigito] = useState("");
@@ -106,22 +106,20 @@ export const DetalheDeAtendente: React.FC = () => {
                         navigate("/atendente");
                     }
                     else {
+                        console.log("result")
                         console.log(result)
 
                         setNome(result.nome);
                         setApelido(result.apelido);
                         setEmail(result.email);
                         setTelefone(result.telefone);
-                        setProprietario(result.proprietario === '1' ? true : false);
-                        setGerente(result.gerente === '1' ? true : false);
-                        setProfissional(result.profissional === '1' ? true : false);
-                        setNascimento(result.nascimento);
+                        setNascimento((moment(result.nascimento).format("YYYY-MM-DD")));
                         setCpf(result.cpf);
                         setRg(result.rg);
                         setOrgaoExpedidor(result.orgaoExpedidor);
                         setInformacaoAdicionais(result.informacaoAdicionais);
                         setChavePix(result.ChavePix);
-                        setBanco(result.bancoId);
+                        setBancoId(result.bancoId.toString());
                         setAgencia(result.agencia);
                         setConta(result.conta);
                         setTipoConta(result.tipoConta);
@@ -136,8 +134,11 @@ export const DetalheDeAtendente: React.FC = () => {
                         setEstado(result.estado);
                         setCep(result.cep);
                         setAtivo(result.ativo === '1' ? true : false);
-
-
+                        setProprietario(result.proprietario === '1' ? true : false);
+                        setGerente(result.gerente === '1' ? true : false);
+                        setProfissional(result.profissional === '1' ? true : false);
+                        
+                        
                         formRef.current?.setData(result);
                     }
                 });
@@ -158,7 +159,7 @@ export const DetalheDeAtendente: React.FC = () => {
                 orgaoExpedidor: '',
                 informacaoAdicionais: '',
                 ChavePix: '',
-                bancoId: '',
+                bancoId: undefined,
                 agencia: '',
                 conta: '',
                 digito: '',
@@ -179,8 +180,88 @@ export const DetalheDeAtendente: React.FC = () => {
 
     }, [formRef, id, navigate]);
 
-    const handleSave = () => {
+    const handleSave = (dados: IFormData) => {
+
+        //#region VALIDAÇÃO DE CAMPO
+        var validacao = 0;
+        if (dados.nome.length < 2) {
+            formRef.current?.setFieldError('nome', 'O campo nome é obrigatorio, minimo de 3 caracteres!');
+            setIsLoading(false);
+            validacao = 1;
+        }
+        if (dados.apelido.length < 2) {
+            formRef.current?.setFieldError('apelido', 'O campo apelido é obrigatorio, minimo de 3 caracteres!');
+            setIsLoading(false);
+            validacao = 1;
+        }
+        if (dados.nascimento.length < 2) {
+            formRef.current?.setFieldError('nascimento', 'O campo aniversario é obrigatorio, informe uma data valida!');
+            setIsLoading(false);
+            validacao = 1;
+        }
+        if (dados.email.length < 2) {
+            formRef.current?.setFieldError('email', 'O campo aniversario é obrigatorio, informe uma data valida!');
+            setIsLoading(false);
+            validacao = 1;
+        }
+        if (validacao != 0) {
+            return;
+        }
+
+        //#endregion
+
+        dados.ativo = (ativo === true ? '1' : '0');
+        dados.proprietario = (proprietario === true ? '1' : '0');
+        dados.gerente = (gerente === true ? '1' : '0');
+        dados.profissional = (profissional === true ? '1' : '0');
+        
+        //dados.nascimento = (moment(dados.nascimento).format("YYYY-MM-DD"));
+
+        console.log("dados");
+        console.log(dados);
+
+        if (id === "novo") {
+            AtendenteService.create(dados).then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert("Ops!! algo deu ruim! \n" + result.message);
+                } else {
+                    if (isSaveAndClose()) {
+                        navigate('/atendente');
+                    } else {
+                        navigate(`/atendente/detalhe/${result}`);
+                    }
+                }
+            });
+        }
+        else {
+            setIsLoading(true);
+
+            dados.id = Number(id);
+            AtendenteService.updateById(Number(id), dados).then((result) => {
+                setIsLoading(false);
+                if (result instanceof Error) {
+                    alert("Ops!! algo deu ruim! \n" + result.message);
+                } else {
+                    if (isSaveAndClose()) {
+                        navigate('/atendente');
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
         console.log('Save');
+
+
+
+
+
+
     };
 
     const handleDelete = (id: number) => {
@@ -239,10 +320,10 @@ export const DetalheDeAtendente: React.FC = () => {
                             </Grid>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={12} sm={5} md={2} lg={2} xl={2}>
+                            <Grid item xs={12} sm={8} md={4} lg={3} xl={2}>
                                 <VTextField
                                     fullWidth
-                                    name="celular"
+                                    name="telefone"
                                     disabled={isLoading}
                                     label="Celular"
                                     onChange={e => setTelefone(e.target.value)}
@@ -295,6 +376,7 @@ export const DetalheDeAtendente: React.FC = () => {
                             <Grid item xs={12} sm={5} md={2} lg={2} xl={2}>
                                 <VTextField
                                     fullWidth
+                                    type="date"
                                     name="nascimento"
                                     disabled={isLoading}
                                     label="Aniversario"
@@ -340,6 +422,9 @@ export const DetalheDeAtendente: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+                        <br />
+                        <Divider textAlign="left">dados bancários</Divider>
+
                         <Grid container item direction="row" spacing={2}>
                             <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                                 <VTextField
@@ -353,16 +438,13 @@ export const DetalheDeAtendente: React.FC = () => {
                             <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
                                 <VTextField
                                     fullWidth
-                                    name="banco"
+                                    name="bancoId"
                                     disabled={isLoading}
                                     label="Banco"
-                                    onChange={e => setBanco(e.target.value)}
+                                    onChange={e => setBancoId(e.target.value)}
                                 />
                             </Grid>
                         </Grid>
-                        <br />
-                        <Divider textAlign="left">dados bancários</Divider>
-
                         <Grid container item direction="row" spacing={2}>
                             <Grid item xs={12} sm={5} md={3} lg={3} xl={3}>
                                 <VTextField
@@ -453,7 +535,7 @@ export const DetalheDeAtendente: React.FC = () => {
                             </Grid>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            
+
                             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
                                 <VTextField
                                     fullWidth
@@ -492,9 +574,10 @@ export const DetalheDeAtendente: React.FC = () => {
                                     onChange={e => setComplemento(e.target.value)}
                                 />
                             </Grid>
-                            </Grid>
+                        </Grid>
 
                     </Grid>
+
                     {isLoading && (
                         <Grid item>
                             <LinearProgress variant="indeterminate"></LinearProgress>
