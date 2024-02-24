@@ -30,7 +30,7 @@ export interface IDetalheCliente {
     email: string;
     celular: string;
     instagram: string;
-    nascimento: string;
+    nascimento: Date;
     cpf: string;
     rg: string;
     endereco: string;
@@ -77,7 +77,7 @@ const getById = async (id: number): Promise<IDetalheCliente | Error> => {
 
         if (data) {
             //formatando data           
-            data.nascimento = (moment(data.nascimento).format("DD/MM/YYYY"));
+            data.nascimento = (moment(data.nascimento).format("YYYY-MM-DD"));
             
             return data;
         }

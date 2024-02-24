@@ -6,6 +6,7 @@ import { ClienteService } from "../../shared/services/api/cliente/ClienteService
 import { VForm, VTextField, useVForm } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
+import moment from "moment";
 
 interface IFormData {
     id: number;
@@ -14,7 +15,7 @@ interface IFormData {
     email: string;
     celular: string;
     instagram: string;
-    nascimento: string;
+    nascimento: Date;
     cpf: string;
     rg: string;
     endereco: string;
@@ -76,7 +77,7 @@ export const DetalheDeCliente: React.FC = () => {
                         setEmail(result.email);
                         setCelular(result.celular);
                         setInstagram(result.instagram);
-                        setNascimento(result.nascimento);
+                        setNascimento((moment(result.nascimento).format("YYYY-MM-DD")));
                         setCpf(result.cpf);
                         setRg(result.rg);
                         setEndereco(result.endereco);
@@ -293,7 +294,7 @@ export const DetalheDeCliente: React.FC = () => {
                   
                                 <VTextField
                                     fullWidth
-                                   
+                                   type="date"
                                     name="nascimento"
                                     disabled={isLoading}
                                     label="Data Nascimento"
