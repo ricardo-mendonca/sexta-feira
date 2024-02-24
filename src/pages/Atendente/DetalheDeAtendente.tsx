@@ -17,7 +17,7 @@ interface IFormData {
     proprietario: string;
     gerente: string;
     profissional: string;
-    nascimento: string;
+    nascimento: Date;
     cpf: string;
     rg: string;
     orgaoExpedidor: string;
@@ -194,7 +194,7 @@ export const DetalheDeAtendente: React.FC = () => {
             setIsLoading(false);
             validacao = 1;
         }
-        if (dados.nascimento.length < 2) {
+        if (!dados.nascimento) {
             formRef.current?.setFieldError('nascimento', 'O campo aniversario é obrigatorio, informe uma data valida!');
             setIsLoading(false);
             validacao = 1;
