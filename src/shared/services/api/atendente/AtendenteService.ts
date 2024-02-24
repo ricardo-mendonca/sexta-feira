@@ -42,7 +42,7 @@ export interface IDetalheAtendente{
     proprietario: string;
     gerente: string;
     profissional: string;
-    nascimento: string;
+    nascimento: Date;
     cpf: string;
     rg: string;
     orgaoExpedidor: string;
@@ -99,7 +99,7 @@ const getById = async (id: number): Promise<IDetalheAtendente | Error> => {
 
         if (data) {
             //formatando data           
-            data.nascimento = (moment(data.nascimento).format("DD/MM/YYYY"));
+            data.nascimento = (moment(data.nascimento).format("YYYY-MM-DD"));
             
             return data;
         }
